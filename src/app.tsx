@@ -38,5 +38,13 @@ export function createApp(config: RigConfig = loadConfig()) {
     );
   });
 
+  // Same readNight result as the page, returned unchanged so the two cannot disagree.
+  app.get('/api/digest/:night', (c) => {
+    const night = c.req.param('night');
+    const digest = readNight(config.runsDir, night);
+    if (digest === null) return c.json({ error: 'no run log', night }, 404);
+    return c.json(digest);
+  });
+
   return app;
 }
